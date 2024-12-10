@@ -19,6 +19,33 @@ public:
         delete[] vagoane;
     }
 
+    // constructor de copiere: copiere profundă
+    Tren(const Tren& other)
+        : numarVagoane(other.numarVagoane), vagoane(new std::string[other.numarVagoane]) {
+        for (size_t i = 0; i < other.numarVagoane; i++) {
+            vagoane[i] = other.vagoane[i];
+        }
+    }
+
+    // Operator de atribuire: copiere profunda
+    Tren& operator=(const Tren& other) {
+        if (this == &other) {
+            return *this; // Evit auto-atribuirea
+        }
+
+        // Eliberam memoria existenta
+        delete[] vagoane;
+
+        // Realocam si copiem datele
+        numarVagoane = other.numarVagoane;
+        vagoane = new std::string[other.numarVagoane];
+        for (size_t i = 0; i < other.numarVagoane; ++i) {
+            vagoane[i] = other.vagoane[i];
+        }
+        
+        return *this;
+    }
+
     // setez numele unui vagon
     void setVagon(size_t index, const std::string& nume) {
         if (index < numarVagoane) {
@@ -37,10 +64,20 @@ public:
 };
 
 int main() {
-    Tren tren1(3);
-    tren1.setVagon(0, "Vagon marfă");
-    tren1.setVagon(1, "Vagon pasageri");
-    tren1.afiseazaVagoane();  
+    Tren t1(3);
+    t1.setVagon(0, "Vagon marfă");
+    t1.setVagon(1, "Vagon pasageri");
+    t1.afiseazaVagoane();  
+
+    Tren t2 = t1;        // Constructor de copiere
+    t2.setVagon(0, "Vagon special");
+    t1.afiseazaVagoane();  
+    t2.afiseazaVagoane();
+
+    Tren t3(2);          
+    t3 = t1;                // Operator de atribuire
+    t3.afiseazaVagoane();   // Afișează: Tren: Vagon marfă, Vagon pasageri, Vagon gol
+
 
     return 0;
 }
